@@ -93,7 +93,7 @@ switch ref(1).type
             end
         end
         % Construct the sliced opvar
-        opvar Psop
+        opvar Psop;
         Psop.I=Pbop.I;
         Psop.var1=Pbop.var1;
         Psop.var2=Pbop.var2;

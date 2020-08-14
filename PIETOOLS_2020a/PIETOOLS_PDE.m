@@ -152,7 +152,8 @@ stability=0; stability_dual=0; Hinf_gain=0; Hinf_gain_dual=0; Hinf_control=0; Hi
 % you wish to test. Otherwise, comment the following line and enter your
 % own PDE.
 
-examples_PDE_library_PIETOOLS
+% examples_PDE_library_PIETOOLS
+examples_PDE_library_PIETOOLS_N_order
 
 %%%%%%%%%%%%% Choose Problem to Solve %%%%%%%%%%%%%%%%%%%%%%%%%%
 % If you have not already chosen the problem you want to solve, then
@@ -214,7 +215,8 @@ settings_PIETOOLS_heavy
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% Convert your ODE-PDE system to a PIE
-convert_PIETOOLS_PDE;
+% convert_PIETOOLS_PDE;
+convert_PIETOOLS_PDE_N_order
 
 %%% Construct and solve the LPI corresponding to the problem you specified earlier
 if stability==1
