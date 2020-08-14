@@ -203,11 +203,11 @@ epneg = 0*1e-5;    % Negativity of Derivative of Lyapunov Function in both ODE a
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % settings_PIETOOLS_veryheavy
-settings_PIETOOLS_heavy
+% settings_PIETOOLS_heavy
 %  settings_PIETOOLS_light
 % settings_PIETOOLS_stripped
 % settings_PIETOOLS_extreme
-% settings_PIETOOLS_custom
+settings_PIETOOLS_custom
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

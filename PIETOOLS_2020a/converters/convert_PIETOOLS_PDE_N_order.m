@@ -124,7 +124,7 @@ Q21 = [zeros(nrL1/2,ni{1}),Q21];
 
 
 T11 = [subs(T21,s,a);subs(T21,s,b)];
-Q11 = [subs(Q21,s,a);subs(Q21,s,b)];
+Q11 = [zeros(size(Q21));subs(Q21,s,b)];
 
 
 U2 = zeros(nrL2,np); U1 = eye(nrL2);
