@@ -49,8 +49,8 @@ if any(dim(:,1)~=dim(:,2))|| ~(P==P')
     error('Opvar object can be sign definite if and only if it is self-adjoint')
 end
 
-dim = dim(:,1);
-a = P.I(1); b=P.I(2); s = P.var1; theta = P.var2;
+dim = dim(:,1); I = P.I;
+a = I(1); b=I(2); s = P.var1; theta = P.var2;
 for i=1:100
     x = -10+20*rand(dim(1),1);
     xmbf = (-10+20*rand(dim(2),10))*monomials(s,[0:9]);

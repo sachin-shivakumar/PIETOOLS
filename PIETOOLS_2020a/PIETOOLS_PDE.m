@@ -235,6 +235,9 @@ end
 if Hinf_estimator==1
     executive_PIETOOLS_Hinf_estimator;
 end
+if boundary_control==1
+    executive_PIETOOLS_control_boundary;
+end
 
 % NOTE: if multiple executives are called, prog only contains data from the
 % most recent executive!

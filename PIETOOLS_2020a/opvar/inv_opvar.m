@@ -100,7 +100,9 @@ for i=1:m_dim
 end
 
 % Now use bigZCth to find H!
+
 nZ=length(ZCth);
+bigC=zeros(n_dim, nZ*m_dim);
 for i=1:n_dim
     for j=1:m_dim
         [CQij,Ztemp,etemp] = poly2basis(NQ(i,j),ZCth); % examine each element of NQ
@@ -134,8 +136,8 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 % The first step is to find a polynomial approximation to S^{-1}
-if isa(S,'double')
-    Sh =inv(S);
+if isa(Sa,'double')
+    Sh =inv(Sa);
 else  
 N=100; orderapp=6; % specifies the degree of the polynomial approximation and the number of data points to fit at.
 % It is recommended to use at least a 4th order approximation
@@ -149,7 +151,7 @@ th = s; ksi = theta;
 
 for ss=[l:interval:u]
     ii=ii+1;
-    NShtemp(:,:,ii)=inv_opvar(double(subs_p(NS,th,ss))); % Calculates the value of the inverse of S at every point in the interval
+    NShtemp(:,:,ii)=inv(double(subs_p(NS,th,ss))); % Calculates the value of the inverse of S at every point in the interval
 end
 
 % The following fits a polynomial to every element of S^{-1}
@@ -172,7 +174,7 @@ end
 
 % Now we compute the matrix K (does not use the approximate S^{-1})
 % This is an anonymous function which is the integrand 
-int_fun = @(sss) double(subs_p(bigZCth,th,sss))*inv_opvar(double(subs_p(NS,th,sss)))*double(subs_p(bigZCth,th,sss)).';
+int_fun = @(sss) double(subs_p(bigZCth,th,sss))*inv(double(subs_p(NS,th,sss)))*double(subs_p(bigZCth,th,sss)).';
 % Uses Matlab internal numerical integration routine.
 K=integral(int_fun,l,u,'ArrayValued',true);
 
@@ -182,11 +184,11 @@ Sh=Sinv;
 end
 Z_h_th=bigZCth*Sinv; % This inherits its degree from S^{-1}
 
-P_inv=inv_opvar(double(NP));
+P_inv=inv(double(NP));
 
 ndtemp=size(K,1);
 
-T=inv_opvar(eye(ndtemp)+K*Gam-r*K*H.'*P_inv*H); % A Matrix
+T=inv(eye(ndtemp)+K*Gam-r*K*H.'*P_inv*H); % A Matrix
 H_h=-P_inv*H*T; % A Matrix
 
 %ndtemp2=size(P_inv,1);
@@ -194,7 +196,7 @@ H_h=-P_inv*H*T; % A Matrix
 Ph=(eye(n_dim) + r*P_inv*H*T*K*H.')*P_inv;
 Qh = H_h*Z_h_th; % Same degree as S^{-1}
 
-Gam_h=(r*T.'*H.'*P_inv*H-Gam)*inv_opvar(eye(ndtemp)+K*Gam); % A Matrix
+Gam_h=(r*T.'*H.'*P_inv*H-Gam)*inv(eye(ndtemp)+K*Gam); % A Matrix
 
 Z_h_ksi=subs(Z_h_th,th,ksi);   
 Rh = Z_h_th.'*Gam_h*Z_h_ksi;  % Twice the degree of S^{-1}
