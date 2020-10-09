@@ -568,20 +568,28 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Boundary controller %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % % % %------------------------------------------------------------------
-% % % % % 2. Diffusive/Heat Equation Type Systems
-% % % % %------------------------------------------------------------------
 % Example 1, stabilizing controller, we set z=0, w=0 
-boundary_control=1
-lamb = 10;
-nw = 0; ny = 0; nz = 0; no = 0; nu = 1;
-n0=0; n1 =0; n2 =1; np = n0+n1+n2; 
-A0 = lamb; A1 = zeros(np,n1+n2); A2 = 1;
-B21 = 0; B22 = 0; Bu = [0;1];
-on = eye(n2); zer = zeros(n2);
+% boundary_control=1
+% lamb = 10;
+% nw = 0; ny = 0; nz = 0; no = 0; nu = 1;
+% n0=0; n1 =0; n2 =1; np = n0+n1+n2; 
+% A0 = lamb; A1 = zeros(np,n1+n2); A2 = 1;
+% B21 = 0; B22 = 0; Bu = [0;1];
+% on = eye(n2); zer = zeros(n2);
+% 
+% B=[on zer zer zer;
+%    zer on zer zer];
+% a = 0; b =1;
 
-B=[on zer zer zer;
-   zer on zer zer];
+% Example 2, stabilizing controller for wave equation, we set z=0, w=0 
+boundary_control=1
+nw = 0; ny = 0; nz = 0; no = 0; nu = 1;
+n0=0; n1 =2; n2 =0; np = n0+n1+n2; 
+A0 = zeros(n1); A1 = [0 1;1 0]; 
+B21 = 0; B22 = 0; Bu = [0;1];
+
+B=[1 0 0 0;
+   0 0 0 1];
 a = 0; b =1;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
