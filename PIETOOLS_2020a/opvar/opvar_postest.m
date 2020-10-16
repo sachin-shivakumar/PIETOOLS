@@ -58,11 +58,21 @@ for i=1:100
         + int(xmbf'*P.R.R0*xmbf,s,a,b)+ int(int(xmbf'*P.R.R1*subs(xmbf,s,theta),theta,a,s),s,a,b)...
         + int(int(xmbf'*P.R.R1*subs(xmbf,s,theta),theta,s,b),s,a,b));
 end
-if all(inprod>=0)
+
+m = min(inprod);
+M = max(inprod);
+if m>0
     logval=1;
-elseif all(inprod<=0)
+elseif M<=0
     logval=-1;
 else
     logval=0;
 end
+% if all(inprod>=0)
+%     logval=1;
+% elseif all(inprod<=0)
+%     logval=-1;
+% else
+%     logval=0;
+% end
 end

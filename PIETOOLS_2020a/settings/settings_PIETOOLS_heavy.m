@@ -2,9 +2,9 @@
 % internal variables:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-n_order1 = 2; 
-n_order2 = 1; % This is supposed to be an accuracy/non-balancing degree
-n_order3 = 1;
+n_order1 = 3; 
+n_order2 = 3; % This is supposed to be an accuracy/non-balancing degree
+n_order3 = 3;
 n_order4 = max([n_order2,n_order3]);
 
 
