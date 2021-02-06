@@ -1,20 +1,21 @@
-function T = transl(T,I)
+function Td = discretize_opvar(T,N)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% [Pcat] = transl(T,[c,d]) takes in a 4-PI operator T that acts on
-% functions in the interval [a,b] and changes it to a 4-PI operator that
-% acts of functions on the interval [c,d].
+% [Td] = discretize_opvar(T,N) takes in a 4-PI operator T that acts on
+% functions in the interval [a,b] and changes it to a matrix Td that acts
+% on polynomials of degree decomposed using chebyshev polynomial basis upto
+% degree N.
 %
 % INPUT:
 %
 % T: a 4-PI operator
-% [c,d]: interval, default [-1,1]
+% N: max degree of chebyshev polynomial basis, default 2
 % 
 % NOTES:
 % For support, contact M. Peet, Arizona State University at mpeet@asu.edu
 % or S. Shivakumar at sshivak8@asu.edu
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% PIETools - transl
+% PIETools - discretize_opvar
 %
 % Copyright (C)2019  M. Peet, S. Shivakumar
 %
@@ -41,15 +42,15 @@ function T = transl(T,I)
 
 
 if nargin==1
-    I = [-1,1];
+    N = 2;
 elseif nargin>2
     error("Incorrect number of inputs; only 2 inputs are allowed");
 end
 if ~isa(T,'opvar')
     error("First argument must be a opvar class object");
 end
-if length(I)~=2
-    error("Second argument must be an array of length 2");
+if isinteger(N)~=1
+    error("Second argument must be an integer");
 end
 
 I_init = T.I;
@@ -59,22 +60,6 @@ b = I_init(2);
 c = I(1);
 d = I(2);
 
-pvar s theta sbar thetabar;
+pvar s theta;
 
-T.Q1 = ((b-a)/(d-c))*subs(T.(i{:}), s, ((b-a)/(d-c))*sbar+(a*d-b*c)/(d-c));
-T.Q1 = subs(T.(i{:}), sbar, s);
-
-T.Q2 = subs(T.Q2, s, ((b-a)/(d-c))*sbar+(a*d-b*c)/(d-c));
-T.Q2 = subs(T.Q2, sbar, s);
-
-T.R.R0 = subs(T.R.R0, s, ((b-a)/(d-c))*sbar+(a*d-b*c)/(d-c));
-T.R.R0 = subs(T.R.R0, sbar, s);
-    
-T.R.R1 = subs(subs(T.R.R1, s, ((b-a)/(d-c))*sbar+(a*d-b*c)/(d-c)), theta, ((b-a)/(d-c))*thetabar+(a*d-b*c)/(d-c));
-T.R.R1 = subs(subs(T.R.R1, sbar, s),thetabar, theta);
-
-T.R.R2 = subs(subs(T.R.R2, s, ((b-a)/(d-c))*sbar+(a*d-b*c)/(d-c)), theta, ((b-a)/(d-c))*thetabar+(a*d-b*c)/(d-c));
-T.R.R2 = subs(subs(T.R.R2, sbar, s),thetabar,theta);
-
-T.I = I;
 end
