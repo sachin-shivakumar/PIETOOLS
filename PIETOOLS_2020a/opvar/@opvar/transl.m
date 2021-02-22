@@ -61,8 +61,8 @@ d = I(2);
 
 pvar s theta sbar thetabar;
 
-T.Q1 = ((b-a)/(d-c))*subs(T.(i{:}), s, ((b-a)/(d-c))*sbar+(a*d-b*c)/(d-c));
-T.Q1 = subs(T.(i{:}), sbar, s);
+T.Q1 = ((b-a)/(d-c))*subs(T.Q1, s, ((b-a)/(d-c))*sbar+(a*d-b*c)/(d-c));
+T.Q1 = subs(T.Q1, sbar, s);
 
 T.Q2 = subs(T.Q2, s, ((b-a)/(d-c))*sbar+(a*d-b*c)/(d-c));
 T.Q2 = subs(T.Q2, sbar, s);

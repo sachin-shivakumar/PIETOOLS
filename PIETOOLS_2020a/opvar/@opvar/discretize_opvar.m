@@ -49,7 +49,7 @@ end
 if ~isa(T,'opvar')
     error("First argument must be a opvar class object");
 end
-if isinteger(N)~=1
+if mod(N,1)~=0
     error("Second argument must be an integer");
 end
 
@@ -57,9 +57,43 @@ I_init = T.I;
 a = I_init(1);
 b = I_init(2);
 
-c = I(1);
-d = I(2);
+Tn = transl(T,[-1,1]);
 
-pvar s theta;
+s = Tn.var1;
+theta = Tn.var2;
+
+dim = Tn.dim;
+
+%get dim of input vectors
+m = dim(1,2); n = dim(2,2);
+
+%
+u_f = polynomial(zeros(m+n,1)); 
+
+%generate pvar coeffs
+if m>0
+for i=1:m
+    eval(['pvar cf_' num2str(i)]);
+    u_f(i,1) = eval(['cf_' num2str(i)]);
+end
+for i=1:n
+    for j =0:N
+        eval(['pvar cf_' num2str(m+j+(i-1)*N)]);
+        u_f(m+i,1) = u_f(i,1) + eval(['cf_' num2str(m+j+(i-1)*N)])*cheb_poly_2(s,j);
+    end
+end
+elseif m==0
+for i=1:n
+    for j =0:N
+        eval(['pvar cf_' num2str(j+(i-1)*N)]);
+        u_f(i,1) = u_f(i,1) + eval(['cf_' num2str(j+(i-1)*N)])*cheb_poly_2(s,j);
+    end
+end
+end
+% v_f =  Tu_f
+
+v_f = [Tn.P*u_f(1:m)+int(Tn.Q1*u_f(m+1:m+n),s,-1,1); 
+       Tn.Q2*u_f(1:m)+Tn.R.R0*u_f(m+1:m+n)+int(Tn.R.R1*u_f(m+1:m+n),theta,-1,s)+int(Tn.R.R2*u_f(m+1:m+n),theta,s,1)];
 
 end
+
