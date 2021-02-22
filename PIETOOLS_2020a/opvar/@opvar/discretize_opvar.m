@@ -1,14 +1,13 @@
-function Td = discretize_opvar(T,N)
+function Td = discretize_opvar(T, N,u_f)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% [Td] = discretize_opvar(T,N) takes in a 4-PI operator T that acts on
-% functions in the interval [a,b] and changes it to a matrix Td that acts
-% on polynomials of degree decomposed using chebyshev polynomial basis upto
-% degree N.
+% [Td] = discretize_opvar(T,N,uf) takes in a 4-PI operator T that acts on
+% functions uf in the interval [-1,1] and returns Td such that Td*coefs=T*uf.
 %
 % INPUT:
 %
 % T: a 4-PI operator
 % N: max degree of chebyshev polynomial basis, default 2
+% u_f: polynomial of N degree
 % 
 % NOTES:
 % For support, contact M. Peet, Arizona State University at mpeet@asu.edu
@@ -43,8 +42,10 @@ function Td = discretize_opvar(T,N)
 
 if nargin==1
     N = 2;
-elseif nargin>2
-    error("Incorrect number of inputs; only 2 inputs are allowed");
+elseif nargin==2
+    u_f = 1;
+elseif nargin>3
+    error("Incorrect number of inputs; only 3 inputs are allowed");
 end
 if ~isa(T,'opvar')
     error("First argument must be a opvar class object");
@@ -66,34 +67,17 @@ dim = Tn.dim;
 
 %get dim of input vectors
 m = dim(1,2); n = dim(2,2);
-
-%
-u_f = polynomial(zeros(m+n,1)); 
-
-%generate pvar coeffs
-if m>0
-for i=1:m
-    eval(['pvar cf_' num2str(i)]);
-    u_f(i,1) = eval(['cf_' num2str(i)]);
-end
-for i=1:n
-    for j =0:N
-        eval(['pvar cf_' num2str(m+j+(i-1)*N)]);
-        u_f(m+i,1) = u_f(i,1) + eval(['cf_' num2str(m+j+(i-1)*N)])*cheb_poly_2(s,j);
-    end
-end
-elseif m==0
-for i=1:n
-    for j =0:N
-        eval(['pvar cf_' num2str(j+(i-1)*N)]);
-        u_f(i,1) = u_f(i,1) + eval(['cf_' num2str(j+(i-1)*N)])*cheb_poly_2(s,j);
-    end
-end
-end
+p = dim(1,1); q = dim(2,1);
 % v_f =  Tu_f
-
-v_f = [Tn.P*u_f(1:m)+int(Tn.Q1*u_f(m+1:m+n),s,-1,1); 
-       Tn.Q2*u_f(1:m)+Tn.R.R0*u_f(m+1:m+n)+int(Tn.R.R1*u_f(m+1:m+n),theta,-1,s)+int(Tn.R.R2*u_f(m+1:m+n),theta,s,1)];
-
+v_f = [Tn.P*u_f(1:m,:)+int(Tn.Q1*u_f(m+1:m+n,:),s,-1,1); 
+       Tn.Q2*u_f(1:m,:)+Tn.R.R0*u_f(m+1:m+n,:)+int(Tn.R.R1*u_f(m+1:m+n,:),theta,-1,s)+int(Tn.R.R2*u_f(m+1:m+n,:),theta,s,1)];
+dx = 2/100;
+Td = v_f(1:p);
+for i=0:N
+    ip = subs(v_f(p+1:end).*cheb_poly_2(s,i),s,linspace(-1+dx,1-dx,100));
+    Td(p+1+i*q:p+(i+1)*q,:) = sum(ip./sqrt(1-linspace(-1+dx,1-dx,100).^2).*dx,2);
 end
+         
+end
+
 
